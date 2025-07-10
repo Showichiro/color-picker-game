@@ -19,7 +19,7 @@ export const ColorPanel = ({ panel, onClick, disabled = false, isTarget = false 
       disabled={disabled}
       className={`
         relative w-32 h-32 rounded-lg shadow-lg transition-transform
-        ${disabled ? 'cursor-not-allowed opacity-50' : 'hover:scale-105 active:scale-95'}
+        ${disabled ? 'cursor-not-allowed' : 'hover:scale-105 active:scale-95 cursor-pointer'}
       `}
       style={{ backgroundColor }}
       aria-label="Color panel"

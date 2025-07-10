@@ -13,7 +13,7 @@ export const GameBoard = ({ round, onGuess }: GameBoardProps) => {
       {/* Target Color Display */}
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-4">Find this color:</h2>
-        <div className="p-4 bg-gray-100 rounded-lg">
+        <div className="flex justify-center">
           <ColorPanel
             panel={round.target}
             onClick={() => {}}

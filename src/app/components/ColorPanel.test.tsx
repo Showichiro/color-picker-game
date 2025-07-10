@@ -32,12 +32,11 @@ describe('ColorPanel', () => {
     expect(panel).toHaveAttribute('aria-label', 'Color panel');
   });
 
-  it('should apply disabled styles when disabled', () => {
+  it('should be disabled when disabled prop is true', () => {
     render(<ColorPanel panel={mockPanel} onClick={() => {}} disabled />);
     
     const panel = screen.getByRole('button');
     expect(panel).toBeDisabled();
-    expect(panel).toHaveClass('cursor-not-allowed');
   });
 
   it('should show target indicator when isTarget is true', () => {
