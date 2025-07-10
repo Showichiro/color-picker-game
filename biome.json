@@ -10,13 +10,15 @@
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space"
+    "indentStyle": "space",
+    "includes": ["!node_modules"]
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true
-    }
+    },
+    "includes": ["!node_modules"]
   },
   "javascript": {
     "formatter": {
