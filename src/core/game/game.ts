@@ -1,16 +1,24 @@
 import { generateRandomRGB, generateSimilarColor } from '../color/color';
-import { type ColorPanelId, err, ok, type Result } from '../types';
+import { type ColorPanelId, err, isOk, ok, type Result } from '../types';
 import type { ColorPanel, Game, GameRound } from './types';
 
-let panelIdCounter = 0;
+type IdGenerator = () => ColorPanelId;
 
-const createPanelId = (): ColorPanelId => 
-  `panel-${++panelIdCounter}` as ColorPanelId;
+export const createIdGenerator = (): IdGenerator => {
+  let counter = 0;
+  return () => `panel-${counter++}` as ColorPanelId;
+};
 
-export const createColorPanel = (): ColorPanel => ({
-  id: createPanelId(),
-  color: generateRandomRGB(),
-});
+export const createColorPanel = (idGenerator: IdGenerator): Result<ColorPanel, string> => {
+  const colorResult = generateRandomRGB();
+  if (!isOk(colorResult)) {
+    return err('Failed to generate random RGB');
+  }
+  return ok({
+    id: idGenerator(),
+    color: colorResult.value,
+  });
+};
 
 const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array];
@@ -25,17 +33,22 @@ export const generateChoicePanels = (
   target: ColorPanel,
   count: number,
   maxDistance: number,
-): ColorPanel[] => {
+  idGenerator: IdGenerator,
+): Result<ColorPanel[], string> => {
   const panels: ColorPanel[] = [target];
   
   for (let i = 1; i < count; i++) {
+    const colorResult = generateSimilarColor(target.color, maxDistance);
+    if (!isOk(colorResult)) {
+      return err('Failed to generate similar color');
+    }
     panels.push({
-      id: createPanelId(),
-      color: generateSimilarColor(target.color, maxDistance),
+      id: idGenerator(),
+      color: colorResult.value,
     });
   }
   
-  return shuffleArray(panels);
+  return ok(shuffleArray(panels));
 };
 
 const DIFFICULTY_SETTINGS = {
@@ -60,13 +73,24 @@ export const createGameRound = (level: number): Result<GameRound, string> => {
   }
   
   const { choiceCount, maxDistance } = getDifficultySettings(level);
-  const target = createColorPanel();
-  const choices = generateChoicePanels(target, choiceCount, maxDistance);
+  const idGenerator = createIdGenerator();
+  const targetResult = createColorPanel(idGenerator);
+  
+  if (!isOk(targetResult)) {
+    return err(targetResult.error);
+  }
+  
+  const target = targetResult.value;
+  const choicesResult = generateChoicePanels(target, choiceCount, maxDistance, idGenerator);
+  
+  if (!isOk(choicesResult)) {
+    return err(choicesResult.error);
+  }
   
   return ok({
     level,
     target,
-    choices,
+    choices: choicesResult.value,
     answered: false,
     correct: false,
   });

@@ -4,6 +4,7 @@ import {
   createColorPanel,
   createGame,
   createGameRound,
+  createIdGenerator,
   generateChoicePanels,
   getGameScore,
   getGameStatus,
@@ -14,50 +15,114 @@ import {
 } from './game';
 
 describe('Game Domain', () => {
-  describe('createColorPanel', () => {
-    it('should create a color panel with unique id', () => {
-      const panel1 = createColorPanel();
-      const panel2 = createColorPanel();
+  describe('createIdGenerator', () => {
+    it('should generate sequential unique IDs', () => {
+      const generator = createIdGenerator();
+      const id1 = generator();
+      const id2 = generator();
+      const id3 = generator();
       
-      expect(panel1.id).not.toBe(panel2.id);
-      expect(panel1.color).toBeDefined();
-      expect(panel1.color.r).toBeGreaterThanOrEqual(0);
-      expect(panel1.color.r).toBeLessThanOrEqual(255);
+      expect(id1).toBe('panel-0');
+      expect(id2).toBe('panel-1');
+      expect(id3).toBe('panel-2');
+    });
+
+    it('should create independent generators', () => {
+      const generator1 = createIdGenerator();
+      const generator2 = createIdGenerator();
+      
+      const id1 = generator1();
+      const id2 = generator2();
+      
+      expect(id1).toBe('panel-0');
+      expect(id2).toBe('panel-0');
+    });
+  });
+
+  describe('createColorPanel', () => {
+    it('should create a color panel with unique id using IdGenerator', () => {
+      const idGenerator = createIdGenerator();
+      const result1 = createColorPanel(idGenerator);
+      const result2 = createColorPanel(idGenerator);
+      
+      expect(isOk(result1)).toBe(true);
+      expect(isOk(result2)).toBe(true);
+      
+      if (isOk(result1) && isOk(result2)) {
+        const panel1 = result1.value;
+        const panel2 = result2.value;
+        
+        expect(panel1.id).toBe('panel-0');
+        expect(panel2.id).toBe('panel-1');
+        expect(panel1.color).toBeDefined();
+        expect(panel1.color.r).toBeGreaterThanOrEqual(0);
+        expect(panel1.color.r).toBeLessThanOrEqual(255);
+      }
     });
   });
 
   describe('generateChoicePanels', () => {
     it('should generate correct number of panels', () => {
-      const target = createColorPanel();
-      const panels = generateChoicePanels(target, 3, 50);
+      const idGenerator = createIdGenerator();
+      const targetResult = createColorPanel(idGenerator);
       
-      expect(panels).toHaveLength(3);
-      expect(panels).toContainEqual(target);
+      expect(isOk(targetResult)).toBe(true);
+      if (isOk(targetResult)) {
+        const target = targetResult.value;
+        const result = generateChoicePanels(target, 3, 50, idGenerator);
+        
+        expect(isOk(result)).toBe(true);
+        if (isOk(result)) {
+          const panels = result.value;
+          expect(panels).toHaveLength(3);
+          expect(panels).toContainEqual(target);
+        }
+      }
     });
 
     it('should include target panel in random position', () => {
-      const target = createColorPanel();
-      const panels = generateChoicePanels(target, 4, 50);
+      const idGenerator = createIdGenerator();
+      const targetResult = createColorPanel(idGenerator);
       
-      const targetIndex = panels.findIndex(p => p.id === target.id);
-      expect(targetIndex).toBeGreaterThanOrEqual(0);
-      expect(targetIndex).toBeLessThan(4);
+      expect(isOk(targetResult)).toBe(true);
+      if (isOk(targetResult)) {
+        const target = targetResult.value;
+        const result = generateChoicePanels(target, 4, 50, idGenerator);
+        
+        expect(isOk(result)).toBe(true);
+        if (isOk(result)) {
+          const panels = result.value;
+          const targetIndex = panels.findIndex(p => p.id === target.id);
+          expect(targetIndex).toBeGreaterThanOrEqual(0);
+          expect(targetIndex).toBeLessThan(4);
+        }
+      }
     });
 
     it('should generate panels with colors within max distance', () => {
-      const target = createColorPanel();
-      const panels = generateChoicePanels(target, 3, 30);
+      const idGenerator = createIdGenerator();
+      const targetResult = createColorPanel(idGenerator);
       
-      panels.forEach(panel => {
-        if (panel.id !== target.id) {
-          const distance = Math.sqrt(
-            Math.pow(panel.color.r - target.color.r, 2) +
-            Math.pow(panel.color.g - target.color.g, 2) +
-            Math.pow(panel.color.b - target.color.b, 2)
-          );
-          expect(distance).toBeLessThanOrEqual(30);
+      expect(isOk(targetResult)).toBe(true);
+      if (isOk(targetResult)) {
+        const target = targetResult.value;
+        const result = generateChoicePanels(target, 3, 30, idGenerator);
+        
+        expect(isOk(result)).toBe(true);
+        if (isOk(result)) {
+          const panels = result.value;
+          panels.forEach(panel => {
+            if (panel.id !== target.id) {
+              const distance = Math.sqrt(
+                Math.pow(panel.color.r - target.color.r, 2) +
+                Math.pow(panel.color.g - target.color.g, 2) +
+                Math.pow(panel.color.b - target.color.b, 2)
+              );
+              expect(distance).toBeLessThanOrEqual(30);
+            }
+          });
         }
-      });
+      }
     });
   });
 
