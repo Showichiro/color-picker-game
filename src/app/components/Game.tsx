@@ -20,6 +20,9 @@ export const Game = () => {
               <span className="font-semibold">Level:</span> {game.level}
             </div>
             <div>
+              <span className="font-semibold">Lives:</span> {game.lives}
+            </div>
+            <div>
               <span className="font-semibold">Streak:</span> {game.streak}
             </div>
           </div>
@@ -83,6 +86,7 @@ export const Game = () => {
         <footer className="mt-8 text-center text-gray-600">
           <p>Click on the panel that matches the target color.</p>
           <p>Get 3 correct in a row to level up!</p>
+          <p>You have 3 lives. Game ends when you run out of lives.</p>
         </footer>
       </div>
     </div>

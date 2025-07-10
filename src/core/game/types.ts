@@ -20,5 +20,6 @@ export interface Game {
   readonly score: number;
   readonly level: number;
   readonly streak: number;
+  readonly lives: number;
   readonly status: GameStatus;
 }

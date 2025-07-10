@@ -78,6 +78,7 @@ export const createGame = (): Game => ({
   score: 0,
   level: 1,
   streak: 0,
+  lives: 3,
   status: 'playing',
 });
 
@@ -125,12 +126,16 @@ export const processGuess = (
   const updatedRound = guessResult.value;
   const newScore = updatedRound.correct ? game.score + 1 : game.score;
   const newStreak = updatedRound.correct ? game.streak + 1 : 0;
+  const newLives = updatedRound.correct ? game.lives : game.lives - 1;
+  const newStatus = newLives <= 0 ? 'gameOver' : 'playing';
   
   return ok({
     ...game,
     currentRound: updatedRound,
     score: newScore,
     streak: newStreak,
+    lives: newLives,
+    status: newStatus,
   });
 };
 

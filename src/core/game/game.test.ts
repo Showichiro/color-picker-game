@@ -174,6 +174,7 @@ describe('Game Domain', () => {
       expect(game.currentRound).toBeNull();
       expect(game.level).toBe(1);
       expect(game.streak).toBe(0);
+      expect(game.lives).toBe(3);
     });
   });
 
@@ -240,6 +241,39 @@ describe('Game Domain', () => {
     it('should return current status', () => {
       const game = createGame();
       expect(getGameStatus(game)).toBe('playing');
+    });
+  });
+
+  describe('processGuess', () => {
+    it('should decrease lives on incorrect guess', () => {
+      const roundResult = createGameRound(1);
+      if (isOk(roundResult)) {
+        const game = { ...createGame(), currentRound: roundResult.value };
+        const wrongPanel = game.currentRound.choices.find((p: any) => p.id !== game.currentRound!.target.id);
+        
+        const result = processGuess(game, wrongPanel!.id);
+        
+        expect(isOk(result)).toBe(true);
+        if (isOk(result)) {
+          expect(result.value.lives).toBe(2);
+        }
+      }
+    });
+
+    it('should set game over when lives reach 0', () => {
+      const roundResult = createGameRound(1);
+      if (isOk(roundResult)) {
+        const game = { ...createGame(), lives: 1, currentRound: roundResult.value };
+        const wrongPanel = game.currentRound.choices.find((p: any) => p.id !== game.currentRound!.target.id);
+        
+        const result = processGuess(game, wrongPanel!.id);
+        
+        expect(isOk(result)).toBe(true);
+        if (isOk(result)) {
+          expect(result.value.lives).toBe(0);
+          expect(result.value.status).toBe('gameOver');
+        }
+      }
     });
   });
 });
