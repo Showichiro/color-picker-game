@@ -1,12 +1,12 @@
 import { type ColorSet, generateColorSet } from "./colorGenerator";
 
-export const GameState = {
-  PLAYING: "PLAYING",
-  GAME_OVER: "GAME_OVER",
-  PAUSED: "PAUSED",
-} as const;
+export type GameState = "PLAYING" | "GAME_OVER" | "PAUSED";
 
-export type GameState = (typeof GameState)[keyof typeof GameState];
+export const GameState = {
+  PLAYING: "PLAYING" as const,
+  GAME_OVER: "GAME_OVER" as const,
+  PAUSED: "PAUSED" as const,
+};
 
 export interface GameConfig {
   initialPanelCount: number;
@@ -109,8 +109,8 @@ export class GameEngine {
     }
   }
 
-  public getState(): GameStateData {
-    return { ...this.state };
+  public getState(): Readonly<GameStateData> {
+    return this.state;
   }
 
   public resetGame(): void {

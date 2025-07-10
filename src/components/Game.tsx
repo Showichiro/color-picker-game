@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { type GameConfig, GameEngine } from "../game/gameEngine";
 import { GameBoard } from "./GameBoard";
 import "./Game.css";
@@ -11,10 +11,16 @@ const gameConfig: GameConfig = {
 };
 
 export function Game() {
-  const [gameEngine] = useState(() => new GameEngine(gameConfig));
+  const gameEngineRef = useRef<GameEngine | null>(null);
+  if (!gameEngineRef.current) {
+    gameEngineRef.current = new GameEngine(gameConfig);
+  }
+  const gameEngine = gameEngineRef.current;
+
   const [gameState, setGameState] = useState(gameEngine.getState());
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const updateGameState = useCallback(() => {
     setGameState(gameEngine.getState());
@@ -28,14 +34,14 @@ export function Game() {
       setShowFeedback(true);
 
       // Show feedback for a moment before proceeding
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         gameEngine.selectColor(index);
         updateGameState();
         setSelectedIndex(null);
         setShowFeedback(false);
       }, 800);
     },
-    [gameEngine, updateGameState, showFeedback],
+    [gameEngine, updateGameState],
   );
 
   const handlePlayAgain = useCallback(() => {
@@ -46,6 +52,14 @@ export function Game() {
   useEffect(() => {
     updateGameState();
   }, [updateGameState]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   if (gameState.gameStatus === "GAME_OVER") {
     return (

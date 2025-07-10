@@ -14,7 +14,7 @@ describe("Game", () => {
   it("should handle color selection correctly", async () => {
     render(<Game />);
 
-    const panels = screen.getAllByRole("button", { name: "color-panel" });
+    const panels = screen.getAllByRole("button", { name: /Select .+ color/ });
 
     // Click on a panel (might be right or wrong)
     fireEvent.click(panels[0]);
@@ -43,7 +43,7 @@ describe("Game", () => {
         break;
       } catch {
         // Game is still running, make a wrong move
-        const panels = screen.getAllByRole("button", { name: "color-panel" });
+        const panels = screen.getAllByRole("button", { name: /Select .+ color/ });
 
         // Click all panels to ensure we hit a wrong one
         for (let i = 0; i < panels.length; i++) {
@@ -83,7 +83,7 @@ describe("Game", () => {
         break;
       } catch {
         // Game is still running, make a wrong move
-        const panels = screen.getAllByRole("button", { name: "color-panel" });
+        const panels = screen.getAllByRole("button", { name: /Select .+ color/ });
 
         // Click all panels to ensure we hit a wrong one
         for (let i = 0; i < panels.length; i++) {

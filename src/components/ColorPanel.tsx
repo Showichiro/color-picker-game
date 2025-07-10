@@ -1,3 +1,4 @@
+import { memo } from "react";
 import "./ColorPanel.css";
 
 interface ColorPanelProps {
@@ -8,7 +9,7 @@ interface ColorPanelProps {
   isWrong?: boolean;
 }
 
-export function ColorPanel({
+export const ColorPanel = memo(function ColorPanel({
   color,
   onClick,
   isDisabled = false,
@@ -26,7 +27,7 @@ export function ColorPanel({
       style={{ backgroundColor: color }}
       onClick={onClick}
       disabled={isDisabled}
-      aria-label="color-panel"
+      aria-label={`Select ${color} color`}
     />
   );
-}
+});

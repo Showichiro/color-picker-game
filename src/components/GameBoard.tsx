@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import type { GameStateData } from "../game/gameEngine";
 import { ColorPanel } from "./ColorPanel";
 import "./GameBoard.css";
@@ -9,6 +10,12 @@ interface GameBoardProps {
   showFeedback?: boolean;
 }
 
+const getGridColumnsForCount = (count: number): number => {
+  if (count <= 4) return 2;
+  if (count <= 6) return 3;
+  return 4;
+};
+
 export function GameBoard({
   gameState,
   onColorSelect,
@@ -18,17 +25,15 @@ export function GameBoard({
   const { currentRound, score, lives, level, gameStatus } = gameState;
   const isGameOver = gameStatus === "GAME_OVER";
 
+  const gridColumns = useMemo(
+    () =>
+      currentRound ? getGridColumnsForCount(currentRound.colors.length) : 2,
+    [currentRound?.colors.length],
+  );
+
   if (!currentRound) {
     return <div>Loading...</div>;
   }
-
-  const getGridColumns = () => {
-    const count = currentRound.colors.length;
-    if (count <= 2) return 2;
-    if (count <= 4) return 2;
-    if (count <= 6) return 3;
-    return 4;
-  };
 
   return (
     <div className="game-board">
@@ -57,11 +62,11 @@ export function GameBoard({
 
       <div
         className="color-grid"
-        style={{ gridTemplateColumns: `repeat(${getGridColumns()}, 1fr)` }}
+        style={{ gridTemplateColumns: `repeat(${gridColumns}, 1fr)` }}
       >
         {currentRound.colors.map((color, index) => (
           <ColorPanel
-            key={`${index}-${color}`}
+            key={`${level}-${index}`}
             color={color}
             onClick={() => onColorSelect(index)}
             isDisabled={isGameOver || showFeedback}
