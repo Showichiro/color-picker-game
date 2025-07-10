@@ -11,7 +11,7 @@
     "test:watch": "vitest",
     "check": "biome check --write .",
     "type-check": "tsc -b",
-    "all": "bun check && bun test && bun type-check",
+    "all": "bun check && bun run test && bun type-check",
     "prepare": "husky"
   },
   "dependencies": {

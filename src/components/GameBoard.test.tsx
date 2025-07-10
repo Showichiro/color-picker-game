@@ -46,9 +46,12 @@ describe("GameBoard", () => {
   it("should display game stats", () => {
     render(<GameBoard gameState={mockGameState} onColorSelect={() => {}} />);
 
-    expect(screen.getByText(/Score: 100/i)).toBeInTheDocument();
-    expect(screen.getByText(/Lives: 3/i)).toBeInTheDocument();
-    expect(screen.getByText(/Level: 2/i)).toBeInTheDocument();
+    expect(screen.getByText("Score:")).toBeInTheDocument();
+    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(screen.getByText("Lives:")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+    expect(screen.getByText("Level:")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
   });
 
   it("should disable panels when game is over", () => {
