@@ -43,3 +43,23 @@ src/
 - 純粋関数は単体テストで網羅的にテスト
 - 副作用を含む関数は統合テストでテスト
 - モックの使用を最小限にする
+- テストファイルはプロダクトコードと同じディレクトリに配置（*.test.ts）
+
+### 開発環境
+
+- Bunを使用してプロジェクトを管理
+  - 高速な実行環境
+  - JavaScript/TypeScriptのランタイム
+
+### 利用可能なBunコマンド
+
+package.jsonに定義されているスクリプト:
+- `bun run dev` - Viteによる開発サーバーの起動
+- `bun run build` - TypeScriptチェックとViteによるビルド
+- `bun run preview` - ビルド後のプレビューサーバー起動
+- `bun run test` - Vitestによるテストの単発実行
+- `bun run test:watch` - Vitestによるテストのウォッチモード
+- `bun run check` - Biomeによるコードチェックと自動修正
+- `bun run type-check` - TypeScriptの型チェック
+- `bun run all` - check, test, type-check, knipを順番に実行
+- `bun run knip` - 未使用の依存関係やエクスポートをチェック
