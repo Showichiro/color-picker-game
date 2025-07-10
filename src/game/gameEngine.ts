@@ -6,7 +6,7 @@ export const GameState = {
   PAUSED: "PAUSED",
 } as const;
 
-export type GameState = typeof GameState[keyof typeof GameState];
+export type GameState = (typeof GameState)[keyof typeof GameState];
 
 export interface GameConfig {
   initialPanelCount: number;

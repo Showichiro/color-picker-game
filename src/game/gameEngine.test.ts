@@ -30,7 +30,7 @@ describe("GameEngine", () => {
   describe("game progression", () => {
     it("should increase score on correct answer", () => {
       const initialScore = engine.getState().score;
-      const correctIndex = engine.getState().currentRound!.targetIndex;
+      const correctIndex = engine.getState().currentRound?.targetIndex;
 
       engine.selectColor(correctIndex);
 
@@ -39,7 +39,7 @@ describe("GameEngine", () => {
 
     it("should decrease lives on wrong answer", () => {
       const initialLives = engine.getState().lives;
-      const correctIndex = engine.getState().currentRound!.targetIndex;
+      const correctIndex = engine.getState().currentRound?.targetIndex;
       const wrongIndex = correctIndex === 0 ? 1 : 0;
 
       engine.selectColor(wrongIndex);
@@ -50,7 +50,7 @@ describe("GameEngine", () => {
     it("should end game when lives reach zero", () => {
       // Make 3 wrong selections
       for (let i = 0; i < 3; i++) {
-        const correctIndex = engine.getState().currentRound!.targetIndex;
+        const correctIndex = engine.getState().currentRound?.targetIndex;
         const wrongIndex = correctIndex === 0 ? 1 : 0;
         engine.selectColor(wrongIndex);
       }
@@ -60,14 +60,14 @@ describe("GameEngine", () => {
     });
 
     it("should increase panel count at specified intervals", () => {
-      const correctIndex = engine.getState().currentRound!.targetIndex;
+      const correctIndex = engine.getState().currentRound?.targetIndex;
 
       // First level should have 2 panels
       expect(engine.getState().currentRound?.colors).toHaveLength(2);
 
       // Make correct selections to advance levels
       engine.selectColor(correctIndex);
-      const newCorrectIndex = engine.getState().currentRound!.targetIndex;
+      const newCorrectIndex = engine.getState().currentRound?.targetIndex;
       engine.selectColor(newCorrectIndex);
 
       // After 2 correct answers, panel count should increase
@@ -75,23 +75,23 @@ describe("GameEngine", () => {
     });
 
     it("should track consecutive correct answers", () => {
-      const correctIndex = engine.getState().currentRound!.targetIndex;
+      const correctIndex = engine.getState().currentRound?.targetIndex;
 
       engine.selectColor(correctIndex);
       expect(engine.getState().consecutiveCorrect).toBe(1);
 
-      const newCorrectIndex = engine.getState().currentRound!.targetIndex;
+      const newCorrectIndex = engine.getState().currentRound?.targetIndex;
       engine.selectColor(newCorrectIndex);
       expect(engine.getState().consecutiveCorrect).toBe(2);
     });
 
     it("should reset consecutive count on wrong answer", () => {
-      const correctIndex = engine.getState().currentRound!.targetIndex;
+      const correctIndex = engine.getState().currentRound?.targetIndex;
 
       engine.selectColor(correctIndex);
       expect(engine.getState().consecutiveCorrect).toBe(1);
 
-      const newCorrectIndex = engine.getState().currentRound!.targetIndex;
+      const newCorrectIndex = engine.getState().currentRound?.targetIndex;
       const wrongIndex = newCorrectIndex === 0 ? 1 : 0;
       engine.selectColor(wrongIndex);
       expect(engine.getState().consecutiveCorrect).toBe(0);
@@ -100,7 +100,7 @@ describe("GameEngine", () => {
 
   describe("score calculation", () => {
     it("should award higher scores for higher difficulty", () => {
-      const correctIndex = engine.getState().currentRound!.targetIndex;
+      const correctIndex = engine.getState().currentRound?.targetIndex;
 
       // Get score for level 1
       engine.selectColor(correctIndex);
@@ -108,12 +108,12 @@ describe("GameEngine", () => {
 
       // Advance to higher level
       for (let i = 0; i < 5; i++) {
-        const idx = engine.getState().currentRound!.targetIndex;
+        const idx = engine.getState().currentRound?.targetIndex;
         engine.selectColor(idx);
       }
 
       const previousScore = engine.getState().score;
-      const idx = engine.getState().currentRound!.targetIndex;
+      const idx = engine.getState().currentRound?.targetIndex;
       engine.selectColor(idx);
       const scoreIncrease = engine.getState().score - previousScore;
 
@@ -123,7 +123,7 @@ describe("GameEngine", () => {
 
   describe("game reset", () => {
     it("should reset game state properly", () => {
-      const correctIndex = engine.getState().currentRound!.targetIndex;
+      const correctIndex = engine.getState().currentRound?.targetIndex;
 
       // Play a few rounds
       engine.selectColor(correctIndex);

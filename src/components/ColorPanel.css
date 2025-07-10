@@ -1,0 +1,77 @@
+.color-panel {
+  width: 100%;
+  height: 100%;
+  min-width: 100px;
+  min-height: 100px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.color-panel:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.color-panel:active:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.12);
+}
+
+.color-panel:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.color-panel.correct {
+  animation: correctPulse 0.6s ease;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.5);
+}
+
+.color-panel.wrong {
+  animation: wrongShake 0.5s ease;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.5);
+}
+
+@keyframes correctPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes wrongShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+@media (max-width: 768px) {
+  .color-panel {
+    min-width: 80px;
+    min-height: 80px;
+  }
+}
