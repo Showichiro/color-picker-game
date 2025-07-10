@@ -39,16 +39,22 @@ describe('Color Domain', () => {
     it('should convert RGB to HEX correctly', () => {
       const rgb = createRGB(255, 0, 0);
       if (isOk(rgb)) {
-        const hex = rgbToHex(rgb.value);
-        expect(hex).toBe('#ff0000');
+        const result = rgbToHex(rgb.value);
+        expect(isOk(result)).toBe(true);
+        if (isOk(result)) {
+          expect(result.value).toBe('#ff0000');
+        }
       }
     });
 
     it('should handle two-digit hex values', () => {
       const rgb = createRGB(128, 200, 50);
       if (isOk(rgb)) {
-        const hex = rgbToHex(rgb.value);
-        expect(hex).toBe('#80c832');
+        const result = rgbToHex(rgb.value);
+        expect(isOk(result)).toBe(true);
+        if (isOk(result)) {
+          expect(result.value).toBe('#80c832');
+        }
       }
     });
   });
@@ -102,13 +108,17 @@ describe('Color Domain', () => {
 
   describe('generateRandomRGB', () => {
     it('should generate valid RGB color', () => {
-      const rgb = generateRandomRGB();
-      expect(rgb.r).toBeGreaterThanOrEqual(0);
-      expect(rgb.r).toBeLessThanOrEqual(255);
-      expect(rgb.g).toBeGreaterThanOrEqual(0);
-      expect(rgb.g).toBeLessThanOrEqual(255);
-      expect(rgb.b).toBeGreaterThanOrEqual(0);
-      expect(rgb.b).toBeLessThanOrEqual(255);
+      const result = generateRandomRGB();
+      expect(isOk(result)).toBe(true);
+      if (isOk(result)) {
+        const rgb = result.value;
+        expect(rgb.r).toBeGreaterThanOrEqual(0);
+        expect(rgb.r).toBeLessThanOrEqual(255);
+        expect(rgb.g).toBeGreaterThanOrEqual(0);
+        expect(rgb.g).toBeLessThanOrEqual(255);
+        expect(rgb.b).toBeGreaterThanOrEqual(0);
+        expect(rgb.b).toBeLessThanOrEqual(255);
+      }
     });
   });
 
@@ -117,9 +127,13 @@ describe('Color Domain', () => {
       const baseColor = createRGB(128, 128, 128);
       if (isOk(baseColor)) {
         const maxDistance = 50;
-        const similarColor = generateSimilarColor(baseColor.value, maxDistance);
-        const distance = calculateColorDistance(baseColor.value, similarColor);
-        expect(distance).toBeLessThanOrEqual(maxDistance);
+        const result = generateSimilarColor(baseColor.value, maxDistance);
+        expect(isOk(result)).toBe(true);
+        if (isOk(result)) {
+          const similarColor = result.value;
+          const distance = calculateColorDistance(baseColor.value, similarColor);
+          expect(distance).toBeLessThanOrEqual(maxDistance);
+        }
       }
     });
   });
