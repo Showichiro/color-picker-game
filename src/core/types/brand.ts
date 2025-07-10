@@ -4,3 +4,4 @@ type Brand<T, TBrand> = T & { [brand]: TBrand };
 
 export type RGB = Brand<{ r: number; g: number; b: number }, 'RGB'>;
 export type HexColor = Brand<string, 'HexColor'>;
+export type ColorPanelId = Brand<string, 'ColorPanelId'>;

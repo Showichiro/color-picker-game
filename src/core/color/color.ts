@@ -1,4 +1,4 @@
-import { err, ok, type HexColor, type RGB, type Result } from '../types';
+import { err, type HexColor, ok, type Result, type RGB } from '../types';
 
 export const createRGB = (r: number, g: number, b: number): Result<RGB, string> => {
   if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
