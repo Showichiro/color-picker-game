@@ -29,7 +29,14 @@ describe('ColorPanel', () => {
     render(<ColorPanel panel={mockPanel} onClick={() => {}} />);
     
     const panel = screen.getByRole('button');
-    expect(panel).toHaveAttribute('aria-label', 'Color panel');
+    expect(panel).toHaveAttribute('aria-label', 'Color choice panel');
+  });
+  
+  it('should have target accessible label when isTarget is true', () => {
+    render(<ColorPanel panel={mockPanel} onClick={() => {}} isTarget />);
+    
+    const panel = screen.getByRole('button');
+    expect(panel).toHaveAttribute('aria-label', 'Target color panel');
   });
 
   it('should be disabled when disabled prop is true', () => {

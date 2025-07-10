@@ -4,10 +4,22 @@ import type { ColorPanel, Game, GameRound } from './types';
 
 let panelIdCounter = 0;
 
+const createPanelId = (): ColorPanelId => 
+  `panel-${++panelIdCounter}` as ColorPanelId;
+
 export const createColorPanel = (): ColorPanel => ({
-  id: `panel-${++panelIdCounter}` as ColorPanelId,
+  id: createPanelId(),
   color: generateRandomRGB(),
 });
+
+const shuffleArray = <T>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 export const generateChoicePanels = (
   target: ColorPanel,
@@ -16,24 +28,31 @@ export const generateChoicePanels = (
 ): ColorPanel[] => {
   const panels: ColorPanel[] = [target];
   
-  while (panels.length < count) {
-    const color = generateSimilarColor(target.color, maxDistance);
-    const panel: ColorPanel = {
-      id: `panel-${++panelIdCounter}` as ColorPanelId,
-      color,
-    };
-    panels.push(panel);
+  for (let i = 1; i < count; i++) {
+    panels.push({
+      id: createPanelId(),
+      color: generateSimilarColor(target.color, maxDistance),
+    });
   }
   
-  // Shuffle panels
-  return panels.sort(() => Math.random() - 0.5);
+  return shuffleArray(panels);
 };
 
-const getDifficultySettings = (level: number) => {
-  const choiceCount = Math.min(2 + level, 9);
-  const maxDistance = Math.max(150 - (level - 1) * 20, 10);
-  return { choiceCount, maxDistance };
-};
+const DIFFICULTY_SETTINGS = {
+  MIN_CHOICES: 2,
+  MAX_CHOICES: 9,
+  BASE_DISTANCE: 150,
+  DISTANCE_STEP: 20,
+  MIN_DISTANCE: 10,
+} as const;
+
+const getDifficultySettings = (level: number) => ({
+  choiceCount: Math.min(DIFFICULTY_SETTINGS.MIN_CHOICES + level, DIFFICULTY_SETTINGS.MAX_CHOICES),
+  maxDistance: Math.max(
+    DIFFICULTY_SETTINGS.BASE_DISTANCE - (level - 1) * DIFFICULTY_SETTINGS.DISTANCE_STEP,
+    DIFFICULTY_SETTINGS.MIN_DISTANCE
+  ),
+});
 
 export const createGameRound = (level: number): Result<GameRound, string> => {
   if (level < 1) {
@@ -82,20 +101,27 @@ export const createGame = (): Game => ({
   status: 'playing',
 });
 
+const GAME_CONSTANTS = {
+  STREAK_THRESHOLD: 3,
+  MAX_LEVEL: 10,
+} as const;
+
+const calculateLevelProgression = (level: number, streak: number) => {
+  if (streak >= GAME_CONSTANTS.STREAK_THRESHOLD) {
+    return {
+      level: Math.min(level + 1, GAME_CONSTANTS.MAX_LEVEL),
+      streak: 0,
+    };
+  }
+  return { level, streak };
+};
+
 export const startNewRound = (game: Game): Result<Game, string> => {
   if (game.status === 'gameOver') {
     return err('Game is over');
   }
   
-  // Calculate new level based on streak
-  let newLevel = game.level;
-  let newStreak = game.streak;
-  
-  if (game.streak >= 3) {
-    newLevel = Math.min(game.level + 1, 10);
-    newStreak = 0; // Reset streak after level up
-  }
-  
+  const { level: newLevel, streak: newStreak } = calculateLevelProgression(game.level, game.streak);
   const roundResult = createGameRound(newLevel);
   
   if (roundResult._tag === 'Err') {
@@ -144,3 +170,6 @@ export const isGameOver = (game: Game): boolean => game.status === 'gameOver';
 export const getGameScore = (game: Game): number => game.score;
 
 export const getGameStatus = (game: Game): Game['status'] => game.status;
+
+export const canStartNewRound = (game: Game): boolean => 
+  game.status === 'playing' && (!game.currentRound || game.currentRound.answered);

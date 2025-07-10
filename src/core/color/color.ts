@@ -7,18 +7,21 @@ export const createRGB = (r: number, g: number, b: number): Result<RGB, string> 
   return ok({ r, g, b } as RGB);
 };
 
-export const rgbToHex = (rgb: RGB): HexColor => {
-  const toHex = (n: number): string => n.toString(16).padStart(2, '0');
-  return `#${toHex(rgb.r)}${toHex(rgb.g)}${toHex(rgb.b)}` as HexColor;
-};
+const toHex = (n: number): string => n.toString(16).padStart(2, '0');
+
+export const rgbToHex = ({ r, g, b }: RGB): HexColor => 
+  `#${toHex(r)}${toHex(g)}${toHex(b)}` as HexColor;
+
+const HEX_PATTERN = /^#?([0-9A-Fa-f]{6})$/;
 
 export const hexToRgb = (hex: string): Result<RGB, string> => {
-  const cleanHex = hex.replace('#', '');
+  const match = hex.match(HEX_PATTERN);
   
-  if (!/^[0-9A-Fa-f]{6}$/.test(cleanHex)) {
+  if (!match) {
     return err(`Invalid hex format: ${hex}`);
   }
   
+  const cleanHex = match[1];
   const r = parseInt(cleanHex.substring(0, 2), 16);
   const g = parseInt(cleanHex.substring(2, 4), 16);
   const b = parseInt(cleanHex.substring(4, 6), 16);
@@ -40,28 +43,28 @@ export const generateRandomRGB = (): RGB => {
   return { r, g, b } as RGB;
 };
 
+const clamp = (value: number, min: number, max: number): number => 
+  Math.max(min, Math.min(max, value));
+
+const generateColorVariation = (base: number, variation: number): number => {
+  const delta = Math.floor((Math.random() - 0.5) * 2 * variation);
+  return clamp(base + delta, 0, 255);
+};
+
 export const generateSimilarColor = (baseColor: RGB, maxDistance: number): RGB => {
-  let attempts = 0;
   const maxAttempts = 100;
+  const variation = Math.floor(maxDistance / Math.sqrt(3));
   
-  while (attempts < maxAttempts) {
-    const variation = Math.floor(maxDistance / Math.sqrt(3));
-    const dr = Math.floor((Math.random() - 0.5) * 2 * variation);
-    const dg = Math.floor((Math.random() - 0.5) * 2 * variation);
-    const db = Math.floor((Math.random() - 0.5) * 2 * variation);
+  for (let attempts = 0; attempts < maxAttempts; attempts++) {
+    const newColor: RGB = {
+      r: generateColorVariation(baseColor.r, variation),
+      g: generateColorVariation(baseColor.g, variation),
+      b: generateColorVariation(baseColor.b, variation),
+    } as RGB;
     
-    const r = Math.max(0, Math.min(255, baseColor.r + dr));
-    const g = Math.max(0, Math.min(255, baseColor.g + dg));
-    const b = Math.max(0, Math.min(255, baseColor.b + db));
-    
-    const newColor = { r, g, b } as RGB;
-    const distance = calculateColorDistance(baseColor, newColor);
-    
-    if (distance <= maxDistance) {
+    if (calculateColorDistance(baseColor, newColor) <= maxDistance) {
       return newColor;
     }
-    
-    attempts++;
   }
   
   return generateRandomRGB();

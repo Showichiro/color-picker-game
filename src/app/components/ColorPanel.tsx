@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo } from 'react';
 import type { ColorPanel as ColorPanelType } from '../../core/game/types';
 import type { ColorPanelId } from '../../core/types';
 
@@ -8,21 +9,43 @@ interface ColorPanelProps {
   isTarget?: boolean;
 }
 
-export const ColorPanel = ({ panel, onClick, disabled = false, isTarget = false }: ColorPanelProps) => {
+const getButtonClasses = (disabled: boolean) => [
+  'relative',
+  'w-32',
+  'h-32',
+  'rounded-lg',
+  'shadow-lg',
+  'transition-transform',
+  disabled ? 'cursor-not-allowed' : 'hover:scale-105 active:scale-95 cursor-pointer',
+].join(' ');
+
+export const ColorPanel = memo(({ panel, onClick, disabled = false, isTarget = false }: ColorPanelProps) => {
   const { r, g, b } = panel.color;
-  const backgroundColor = `rgb(${r}, ${g}, ${b})`;
+  
+  const backgroundColor = useMemo(
+    () => `rgb(${r}, ${g}, ${b})`,
+    [r, g, b]
+  );
+  
+  const handleClick = useCallback(() => {
+    if (!disabled) {
+      onClick(panel.id);
+    }
+  }, [disabled, onClick, panel.id]);
+  
+  const buttonClasses = useMemo(
+    () => getButtonClasses(disabled),
+    [disabled]
+  );
 
   return (
     <button
       type="button"
-      onClick={() => onClick(panel.id)}
+      onClick={handleClick}
       disabled={disabled}
-      className={`
-        relative w-32 h-32 rounded-lg shadow-lg transition-transform
-        ${disabled ? 'cursor-not-allowed' : 'hover:scale-105 active:scale-95 cursor-pointer'}
-      `}
+      className={buttonClasses}
       style={{ backgroundColor }}
-      aria-label="Color panel"
+      aria-label={isTarget ? 'Target color panel' : 'Color choice panel'}
     >
       {isTarget && (
         <span className="absolute top-2 left-2 text-xs bg-white/80 px-2 py-1 rounded">
@@ -31,4 +54,4 @@ export const ColorPanel = ({ panel, onClick, disabled = false, isTarget = false 
       )}
     </button>
   );
-};
+});
