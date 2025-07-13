@@ -1,11 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
+import type { ColorPanel as ColorPanelType } from '../../core/game/types';
+import type { ColorPanelId, RGB } from '../../core/types';
 import { ColorPanel } from './ColorPanel';
 
 describe('ColorPanel', () => {
-  const mockPanel = {
-    id: 'panel-1' as any,
-    color: { r: 255, g: 0, b: 0 } as any,
+  const mockPanel: ColorPanelType = {
+    id: 'panel-1' as ColorPanelId,
+    color: { r: 255, g: 0, b: 0 } as RGB,
   };
 
   it('should render color panel with correct background color', () => {
