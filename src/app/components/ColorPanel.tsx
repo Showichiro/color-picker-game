@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorPanel as ColorPanelType } from '../../core/game/types';
 import type { ColorPanelId } from '../../core/types';
 
@@ -11,8 +12,10 @@ interface ColorPanelProps {
 
 const getButtonClasses = (disabled: boolean) => [
   'relative',
-  'w-32',
-  'h-32',
+  'w-20 h-20',
+  'sm:w-24 sm:h-24',
+  'md:w-28 md:h-28',
+  'lg:w-32 lg:h-32',
   'rounded-lg',
   'shadow-lg',
   'transition-transform',
@@ -20,6 +23,7 @@ const getButtonClasses = (disabled: boolean) => [
 ].join(' ');
 
 export const ColorPanel = memo(({ panel, onClick, disabled = false, isTarget = false }: ColorPanelProps) => {
+  const { t } = useTranslation();
   const { r, g, b } = panel.color;
   
   const backgroundColor = useMemo(
@@ -49,7 +53,7 @@ export const ColorPanel = memo(({ panel, onClick, disabled = false, isTarget = f
     >
       {isTarget && (
         <span className="absolute top-2 left-2 text-xs bg-white/80 px-2 py-1 rounded">
-          Target
+          {t('game.target')}
         </span>
       )}
     </button>

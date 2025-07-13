@@ -3,6 +3,20 @@ import { describe, expect, it, vi } from 'vitest';
 import type { GameRound } from '../../core/game/types';
 import { GameBoard } from './GameBoard';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'game.findColor': 'Find this color:',
+        'game.target': 'Target',
+        'game.correct': 'Correct!',
+        'game.wrong': 'Wrong!',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 describe('GameBoard', () => {
   const mockRound: GameRound = {
     level: 1,
@@ -66,5 +80,38 @@ describe('GameBoard', () => {
     render(<GameBoard round={incorrectRound} onGuess={() => {}} />);
     
     expect(screen.getByText('Wrong!')).toBeInTheDocument();
+  });
+
+  describe('responsive design', () => {
+    it('should apply mobile styles on small screens', () => {
+      window.innerWidth = 375;
+      render(<GameBoard round={mockRound} onGuess={() => {}} />);
+      
+      const container = screen.getByTestId('game-board-container');
+      expect(container).toHaveClass('flex-col');
+    });
+
+    it('should apply desktop styles on large screens', () => {
+      window.innerWidth = 1024;
+      render(<GameBoard round={mockRound} onGuess={() => {}} />);
+      
+      const container = screen.getByTestId('game-board-container');
+      expect(container).toHaveClass('md:flex-row');
+    });
+
+    it('should adjust grid layout for choices on mobile', () => {
+      window.innerWidth = 375;
+      const mobileRound = {
+        ...mockRound,
+        choices: Array(9).fill(null).map((_, i) => ({
+          id: `panel-${i}` as any,
+          color: { r: i * 20, g: i * 20, b: i * 20 } as any,
+        })),
+      };
+      render(<GameBoard round={mobileRound} onGuess={() => {}} />);
+      
+      const choicesGrid = screen.getByTestId('choices-grid');
+      expect(choicesGrid).toHaveClass('grid-cols-3');
+    });
   });
 });

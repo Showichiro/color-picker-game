@@ -1,6 +1,29 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { GameHeader } from './GameHeader';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'game.title': 'Color Picker Game',
+        'game.score': 'Score',
+        'game.level': 'Level',
+        'game.lives': 'Lives',
+        'game.streak': 'Streak',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
+vi.mock('../../i18n/useLanguage', () => ({
+  useLanguage: () => ({
+    currentLanguage: 'en',
+    changeLanguage: vi.fn(),
+    languages: ['en', 'ja'],
+  }),
+}));
 
 describe('GameHeader', () => {
   it('displays the game title', () => {
