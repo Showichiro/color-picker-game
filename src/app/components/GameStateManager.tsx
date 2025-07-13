@@ -22,7 +22,7 @@ export const GameStateManager = ({
 }: GameStateManagerProps) => {
   const { t } = useTranslation();
   
-  if (currentRound) {
+  if (currentRound && !isGameOver) {
     return (
       <>
         <GameBoard round={currentRound} onGuess={onGuess} />
