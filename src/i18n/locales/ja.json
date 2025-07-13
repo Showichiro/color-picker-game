@@ -1,0 +1,22 @@
+{
+  "game": {
+    "title": "カラーピッカーゲーム",
+    "score": "スコア",
+    "level": "レベル",
+    "lives": "ライフ",
+    "streak": "連続正解",
+    "findColor": "この色を見つけてください：",
+    "target": "ターゲット",
+    "correct": "正解！",
+    "wrong": "不正解！",
+    "gameOver": "ゲームオーバー",
+    "finalScore": "最終スコア",
+    "playAgain": "もう一度プレイ",
+    "instructions": {
+      "title": "遊び方",
+      "goal": "選択肢から目標の色を選んでください",
+      "levelUp": "3回連続で正解するとレベルアップ",
+      "harder": "レベルが上がると選択肢が増え、色の違いが小さくなります"
+    }
+  }
+}

@@ -3,6 +3,20 @@ import { describe, expect, it, vi } from 'vitest';
 import type { GameRound } from '../../core/game/types';
 import { GameBoard } from './GameBoard';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'game.findColor': 'Find this color:',
+        'game.target': 'Target',
+        'game.correct': 'Correct!',
+        'game.wrong': 'Wrong!',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 describe('GameBoard', () => {
   const mockRound: GameRound = {
     level: 1,

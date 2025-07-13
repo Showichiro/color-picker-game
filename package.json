@@ -16,8 +16,10 @@
     "knip": "knip"
   },
   "dependencies": {
+    "i18next": "^25.3.2",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-i18next": "^15.6.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.1.1",

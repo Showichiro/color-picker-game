@@ -7,6 +7,23 @@ import type { Game, GameRound } from '../../core/game/types';
 import { isOk } from '../../core/types';
 import { GameStateManager } from './GameStateManager';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'game.gameOver': 'Game Over!',
+        'game.finalScore': 'Final Score',
+        'game.playAgain': 'Play Again',
+        'game.findColor': 'Find this color:',
+        'game.target': 'Target',
+        'game.correct': 'Correct!',
+        'game.wrong': 'Wrong!',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 describe('GameStateManager', () => {
   const mockOnStartNewRound = vi.fn();
   const mockOnResetGame = vi.fn();

@@ -4,6 +4,17 @@ import type { ColorPanel as ColorPanelType } from '../../core/game/types';
 import type { ColorPanelId, RGB } from '../../core/types';
 import { ColorPanel } from './ColorPanel';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'game.target': 'Target',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 describe('ColorPanel', () => {
   const mockPanel: ColorPanelType = {
     id: 'panel-1' as ColorPanelId,

@@ -1,0 +1,22 @@
+{
+  "game": {
+    "title": "Color Picker Game",
+    "score": "Score",
+    "level": "Level",
+    "lives": "Lives",
+    "streak": "Streak",
+    "findColor": "Find this color:",
+    "target": "Target",
+    "correct": "Correct!",
+    "wrong": "Wrong!",
+    "gameOver": "Game Over",
+    "finalScore": "Final Score",
+    "playAgain": "Play Again",
+    "instructions": {
+      "title": "How to Play",
+      "goal": "Match the target color from the choices",
+      "levelUp": "Get 3 correct answers in a row to level up",
+      "harder": "Higher levels have more choices and similar colors"
+    }
+  }
+}

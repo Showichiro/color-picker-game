@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { GameRound } from '../../core/game/types';
 import type { ColorPanelId } from '../../core/types';
 import { ColorPanel } from './ColorPanel';
@@ -8,6 +9,8 @@ interface GameBoardProps {
 }
 
 export const GameBoard = ({ round, onGuess }: GameBoardProps) => {
+  const { t } = useTranslation();
+  
   const getGridCols = () => {
     const count = round.choices.length;
     if (count <= 4) return 'grid-cols-2 sm:grid-cols-2 md:grid-cols-4';
@@ -20,7 +23,7 @@ export const GameBoard = ({ round, onGuess }: GameBoardProps) => {
     <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 p-4" data-testid="game-board-container">
       {/* Target Color Display */}
       <div className="text-center md:flex-shrink-0">
-        <h2 className="text-xl sm:text-2xl font-bold mb-2 md:mb-4">Find this color:</h2>
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 md:mb-4">{t('game.findColor')}</h2>
         <div className="flex justify-center">
           <ColorPanel
             panel={round.target}
@@ -46,7 +49,7 @@ export const GameBoard = ({ round, onGuess }: GameBoardProps) => {
       {/* Result Display */}
       {round.answered && (
         <div className={`text-2xl sm:text-3xl font-bold ${round.correct ? 'text-green-600' : 'text-red-600'} absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:static md:transform-none`}>
-          {round.correct ? 'Correct!' : 'Wrong!'}
+          {round.correct ? t('game.correct') : t('game.wrong')}
         </div>
       )}
     </div>
