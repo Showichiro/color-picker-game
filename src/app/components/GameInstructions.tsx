@@ -1,9 +1,13 @@
+import { useTranslation } from 'react-i18next';
+
 export const GameInstructions = () => {
+  const { t } = useTranslation();
+  
   return (
     <footer className="mt-8 text-center text-gray-600">
-      <p>Click on the panel that matches the target color.</p>
-      <p>Get 3 correct in a row to level up!</p>
-      <p>You have 3 lives. Game ends when you run out of lives.</p>
+      <p>{t('game.instructions.clickPanel')}</p>
+      <p>{t('game.instructions.levelUpCondition')}</p>
+      <p>{t('game.instructions.livesExplanation')}</p>
     </footer>
   );
 };

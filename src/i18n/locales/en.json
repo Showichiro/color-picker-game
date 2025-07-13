@@ -19,7 +19,10 @@
       "title": "How to Play",
       "goal": "Match the target color from the choices",
       "levelUp": "Get 3 correct answers in a row to level up",
-      "harder": "Higher levels have more choices and similar colors"
+      "harder": "Higher levels have more choices and similar colors",
+      "clickPanel": "Click on the panel that matches the target color.",
+      "levelUpCondition": "Get 3 correct in a row to level up!",
+      "livesExplanation": "You have 3 lives. Game ends when you run out of lives."
     }
   }
 }
