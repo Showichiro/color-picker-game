@@ -12,6 +12,9 @@
     "gameOver": "Game Over",
     "finalScore": "Final Score",
     "playAgain": "Play Again",
+    "startGame": "Start Game",
+    "nextRound": "Next Round",
+    "testSkills": "Test your color recognition skills!",
     "instructions": {
       "title": "How to Play",
       "goal": "Match the target color from the choices",

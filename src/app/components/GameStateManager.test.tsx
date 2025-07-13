@@ -18,6 +18,9 @@ vi.mock('react-i18next', () => ({
         'game.target': 'Target',
         'game.correct': 'Correct!',
         'game.wrong': 'Wrong!',
+        'game.startGame': 'Start Game',
+        'game.nextRound': 'Next Round',
+        'game.testSkills': 'Test your color recognition skills!',
       };
       return translations[key] || key;
     },

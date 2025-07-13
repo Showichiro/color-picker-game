@@ -33,7 +33,7 @@ export const GameStateManager = ({
               onClick={onStartNewRound}
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
             >
-              Next Round
+              {t('game.nextRound')}
             </button>
           </div>
         )}
@@ -57,13 +57,13 @@ export const GameStateManager = ({
       ) : (
         <>
           <h2 className="text-2xl font-semibold mb-8">
-            Test your color recognition skills!
+            {t('game.testSkills')}
           </h2>
           <button
             onClick={onStartNewRound}
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
           >
-            Start Game
+            {t('game.startGame')}
           </button>
         </>
       )}

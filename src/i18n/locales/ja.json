@@ -12,6 +12,9 @@
     "gameOver": "ゲームオーバー",
     "finalScore": "最終スコア",
     "playAgain": "もう一度プレイ",
+    "startGame": "ゲームを開始",
+    "nextRound": "次のラウンド",
+    "testSkills": "色の識別能力をテストしましょう！",
     "instructions": {
       "title": "遊び方",
       "goal": "選択肢から目標の色を選んでください",
